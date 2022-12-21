@@ -76,7 +76,7 @@ namespace PoKiegoGrzybaAPI.Controllers
                 }
                 else
                 {
-                    var userData = await _context.MushroomHunter.FirstOrDefaultAsync(x => x.EmailAdress == userLogInData.Email);
+                    var userData = await _context.MushroomHunter.FirstOrDefaultAsync(x => x.Login == userLogInData.Login);
                     if (userData != null)
                     {
 

@@ -14,7 +14,7 @@ namespace PoKiegoGrzybaAPI.Models
         public string Password { get; set; }
         [Required]
         public string EmailAdress { get; set; }
-        public long Points { get; set; } = 0;
-        public byte[] Avatar { get; set; }
+        public long? Points { get; set; }
+        public byte[]? Avatar { get; set; }
     }
 }
