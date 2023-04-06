@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PoKiegoGrzybaAPI.Data;
 using PoKiegoGrzybaAPI.Data.Helpers;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,16 +12,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.AddDbContext<PoKiegoGrzybaDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PoKiegoGrzybaConnection"), x => x.UseNetTopologySuite()));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions()
+{
+    ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+});
 
 app.UseHttpsRedirection();
 

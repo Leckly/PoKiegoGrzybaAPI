@@ -99,5 +99,11 @@ namespace PoKiegoGrzybaAPI.Controllers
                 return Problem(ex.ToString());
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Hello()
+        {
+            return Ok("Hi!");
+        }
     }
 }
