@@ -6,6 +6,7 @@ using PoKiegoGrzybaAPI.Data;
 using PoKiegoGrzybaAPI.Data.Helpers;
 using PoKiegoGrzybaAPI.Data.Req;
 using PoKiegoGrzybaAPI.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace PoKiegoGrzybaAPI.Controllers
 {
@@ -34,7 +35,7 @@ namespace PoKiegoGrzybaAPI.Controllers
                     {
                         Login = userRegisterData.Login,
                         EmailAdress = userRegisterData.Email,
-                        Avatar = userRegisterData.Avatar,
+                        Avatar = null,
                         Points = 0,
                         Password = SecretHasher.Hash(userRegisterData.Password)
                     };
@@ -56,49 +57,38 @@ namespace PoKiegoGrzybaAPI.Controllers
         public async Task<IActionResult> UserLogin([FromBody] UserLogInData userLogInData)
         {
             try
-            {
-                if (userLogInData.Login == null)
+            { 
+                var userData = await _context.MushroomHunter.FirstOrDefaultAsync(x => x.EmailAdress == userLogInData.Email);
+                if (userData != null)
                 {
-                    var userData = await _context.MushroomHunter.FirstOrDefaultAsync(x => x.EmailAdress == userLogInData.Email);
-                    if (userData != null)
+                    if (SecretHasher.Verify(userLogInData.Password, userData.Password))
                     {
-                        if(SecretHasher.Verify(userLogInData.Password, userData.Password))
-                            return Ok();
-                        else
-                        {
-                            return ValidationProblem("Bad data");
-                        }
+                        userData.Password = "";
+                        return Ok(userData);
                     }
                     else
                     {
-                        return NotFound();
+                        return ValidationProblem("Wrong Password");
                     }
                 }
                 else
                 {
-                    var userData = await _context.MushroomHunter.FirstOrDefaultAsync(x => x.Login == userLogInData.Login);
-                    if (userData != null)
-                    {
-
-                        if (SecretHasher.Verify(userLogInData.Password, userData.Password))
-                            return Ok();
-                        else
-                        {
-                            return ValidationProblem("Bad data");
-                        }
-                    }
-                    else
-                    {
-                        return NotFound();
-                    }
-
+                    return NotFound();
                 }
+                
             }
             catch (Exception ex)
             {
                 return Problem(ex.ToString());
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsersList()
+        {
+            return Ok(_context.MushroomHunter.ToList());
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> Hello()
