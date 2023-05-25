@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NetTopologySuite.Geometries;
 using PoKiegoGrzybaAPI.Data;
 
 #nullable disable
@@ -81,11 +80,11 @@ namespace PoKiegoGrzybaAPI.Migrations
 
             modelBuilder.Entity("PoKiegoGrzybaAPI.Models.Mushroom", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int>("Category")
                         .HasColumnType("int");
@@ -111,11 +110,11 @@ namespace PoKiegoGrzybaAPI.Migrations
 
             modelBuilder.Entity("PoKiegoGrzybaAPI.Models.MushroomHunter", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<byte[]>("Avatar")
                         .HasColumnType("varbinary(max)");
@@ -142,25 +141,30 @@ namespace PoKiegoGrzybaAPI.Migrations
 
             modelBuilder.Entity("PoKiegoGrzybaAPI.Models.MushroomSpot", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("MushroomId")
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Point>("Point")
-                        .IsRequired()
-                        .HasColumnType("geography");
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<long>("MushroomHunterId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("SpotName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MushroomId");
+                    b.HasIndex("MushroomHunterId");
 
                     b.ToTable("MushroomSpot");
                 });
@@ -213,13 +217,13 @@ namespace PoKiegoGrzybaAPI.Migrations
 
             modelBuilder.Entity("PoKiegoGrzybaAPI.Models.MushroomSpot", b =>
                 {
-                    b.HasOne("PoKiegoGrzybaAPI.Models.Mushroom", "Mushroom")
+                    b.HasOne("PoKiegoGrzybaAPI.Models.MushroomHunter", "MushroomHunter")
                         .WithMany("MushroomSpot")
-                        .HasForeignKey("MushroomId")
+                        .HasForeignKey("MushroomHunterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Mushroom");
+                    b.Navigation("MushroomHunter");
                 });
 
             modelBuilder.Entity("PoKiegoGrzybaAPI.Models.Question", b =>
@@ -233,7 +237,7 @@ namespace PoKiegoGrzybaAPI.Migrations
                     b.Navigation("Quiz");
                 });
 
-            modelBuilder.Entity("PoKiegoGrzybaAPI.Models.Mushroom", b =>
+            modelBuilder.Entity("PoKiegoGrzybaAPI.Models.MushroomHunter", b =>
                 {
                     b.Navigation("MushroomSpot");
                 });

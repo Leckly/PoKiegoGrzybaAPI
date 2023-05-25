@@ -9,11 +9,12 @@ namespace PoKiegoGrzybaAPI.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string? SpotName { get; set; }
-        [Required]
-        public Point Point { get; set; }
-        public int MushroomId { get; set; }
-        public virtual Mushroom Mushroom { get; set; }
+        public string? Description { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public long MushroomHunterId { get; set; }
+        public virtual MushroomHunter MushroomHunter { get; set; }
     }
 }

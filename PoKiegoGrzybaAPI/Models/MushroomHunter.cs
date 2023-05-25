@@ -7,7 +7,7 @@ namespace PoKiegoGrzybaAPI.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [Required]
         public string Login { get; set; }
         [Required]
@@ -16,5 +16,7 @@ namespace PoKiegoGrzybaAPI.Models
         public string EmailAdress { get; set; }
         public long? Points { get; set; }
         public byte[]? Avatar { get; set; }
+
+        public virtual ICollection<MushroomSpot> MushroomSpot { get; set; }
     }
 }

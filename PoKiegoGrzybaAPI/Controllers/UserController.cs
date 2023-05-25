@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PoKiegoGrzybaAPI.Data;
 using PoKiegoGrzybaAPI.Data.Helpers;
 using PoKiegoGrzybaAPI.Data.Req;
+using PoKiegoGrzybaAPI.Data.Response;
 using PoKiegoGrzybaAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
@@ -45,7 +46,10 @@ namespace PoKiegoGrzybaAPI.Controllers
                 }
                 else
                 {
-                    return Conflict("Istnieje użytkownik o podanym loginie lub emailu");
+                    return Conflict(new ErrorMessage()
+                    {
+                        Message = "There is a user with that email or login"
+                    });
                 }
             }
             catch (Exception ex)
@@ -68,12 +72,18 @@ namespace PoKiegoGrzybaAPI.Controllers
                     }
                     else
                     {
-                        return ValidationProblem("Wrong Password");
+                        return BadRequest(new ErrorMessage()
+                        {
+                            Message = "Wrong Password"
+                        });
                     }
                 }
                 else
                 {
-                    return NotFound();
+                    return NotFound(new ErrorMessage()
+                    {
+                        Message = "Not found user"
+                    });
                 }
                 
             }

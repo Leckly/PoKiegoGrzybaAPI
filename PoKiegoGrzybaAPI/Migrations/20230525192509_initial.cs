@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using NetTopologySuite.Geometries;
 
 #nullable disable
 
 namespace PoKiegoGrzybaAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class NextOne : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,7 +40,7 @@ namespace PoKiegoGrzybaAPI.Migrations
                 name: "Mushroom",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -58,13 +57,13 @@ namespace PoKiegoGrzybaAPI.Migrations
                 name: "MushroomHunter",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmailAdress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Points = table.Column<long>(type: "bigint", nullable: false),
-                    Avatar = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                    Points = table.Column<long>(type: "bigint", nullable: true),
+                    Avatar = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -87,19 +86,21 @@ namespace PoKiegoGrzybaAPI.Migrations
                 name: "MushroomSpot",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SpotName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Point = table.Column<Point>(type: "geography", nullable: false),
-                    MushroomId = table.Column<int>(type: "int", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Latitude = table.Column<double>(type: "float", nullable: false),
+                    Longitude = table.Column<double>(type: "float", nullable: false),
+                    MushroomHunterId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MushroomSpot", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MushroomSpot_Mushroom_MushroomId",
-                        column: x => x.MushroomId,
-                        principalTable: "Mushroom",
+                        name: "FK_MushroomSpot_MushroomHunter_MushroomHunterId",
+                        column: x => x.MushroomHunterId,
+                        principalTable: "MushroomHunter",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -150,9 +151,9 @@ namespace PoKiegoGrzybaAPI.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MushroomSpot_MushroomId",
+                name: "IX_MushroomSpot_MushroomHunterId",
                 table: "MushroomSpot",
-                column: "MushroomId");
+                column: "MushroomHunterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Question_QuizId",
@@ -173,7 +174,7 @@ namespace PoKiegoGrzybaAPI.Migrations
                 name: "Badge");
 
             migrationBuilder.DropTable(
-                name: "MushroomHunter");
+                name: "Mushroom");
 
             migrationBuilder.DropTable(
                 name: "MushroomSpot");
@@ -182,7 +183,7 @@ namespace PoKiegoGrzybaAPI.Migrations
                 name: "Question");
 
             migrationBuilder.DropTable(
-                name: "Mushroom");
+                name: "MushroomHunter");
 
             migrationBuilder.DropTable(
                 name: "Quiz");

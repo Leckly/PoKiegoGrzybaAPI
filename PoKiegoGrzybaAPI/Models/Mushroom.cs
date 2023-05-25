@@ -9,14 +9,12 @@ namespace PoKiegoGrzybaAPI.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [Required]
         public string Name { get; set; }
         public string? Description { get; set; }
         public Category Category { get; set; }
         public MushroomType Type { get; set; }
         public byte[] Image { get; set; }
-
-        public virtual ICollection<MushroomSpot> MushroomSpot { get; set; }
     }
 }
