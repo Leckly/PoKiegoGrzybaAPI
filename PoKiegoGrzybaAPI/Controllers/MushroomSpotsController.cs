@@ -34,14 +34,14 @@ namespace PoKiegoGrzybaAPI.Controllers
                     MushroomHunterId = mushroomSpotAdd.UserID,
                     SpotName = mushroomSpotAdd.SpotName
                 };
-                await context.AddAsync(item);
+                await context.MushroomSpot.AddAsync(item);
                 await context.SaveChangesAsync();
+                return Ok(item);
             }
             catch(Exception ex) 
             {
                 return Conflict(ex);
             }
-            return Ok();
         }
         [HttpGet]
         public async Task<IActionResult> GetUserSpots([FromQuery] long id)

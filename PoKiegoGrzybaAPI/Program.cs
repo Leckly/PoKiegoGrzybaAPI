@@ -13,7 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddDbContext<PoKiegoGrzybaDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PoKiegoGrzybaConnection"), x => x.UseNetTopologySuite()));
+builder.Services.AddDbContext<PoKiegoGrzybaDbContext>(options => options
+.UseSqlServer(builder.Configuration.GetConnectionString("PoKiegoGrzybaConnection"), x => x.UseNetTopologySuite()));
 
 var app = builder.Build();
 
